@@ -8,7 +8,6 @@ import prostoyartemka.ru.items.CustomItem;
 import prostoyartemka.ru.rituals.items.DiamondPowder;
 
 public class DiamondPowderCraft extends SmithingRecipe {
-
     public static NamespacedKey DiamondPowderCraft = new NamespacedKey("rituals", "diamond_powder_craft");
 
     public DiamondPowderCraft() {
