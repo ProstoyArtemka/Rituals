@@ -1,6 +1,6 @@
 name: RItuals
 version: '${project.version}'
-main: prostoyartemka.ru.rituals.RItuals
+main: prostoyartemka.ru.rituals.Rituals
 api-version: 1.19
 authors: [ ProstoyArtemka ]
 description: Plugin for rituals
