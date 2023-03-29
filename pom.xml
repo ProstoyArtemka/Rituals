@@ -71,5 +71,12 @@
             <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>prostoyartemka.ru</groupId>
+            <artifactId>PAPI</artifactId>
+            <version>0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/PAPI-0.1.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
