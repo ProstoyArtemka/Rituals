@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Transformation;
 import prostoyartemka.ru.rituals.Rituals;
 
 import java.util.List;
@@ -18,10 +19,12 @@ public abstract class BasicRitual {
     private final ItemDisplay[] ritualCircles = new ItemDisplay[3];
     private final Location location;
     private final BukkitTask basicUpdate;
+    public boolean Appeared = false;
 
     public abstract List<Boolean> getRotatingParts();
     public abstract int getStartCustomModelData();
     public abstract List<Integer> getRotationPartsSpeed();
+    public abstract List<Float> getAppearSpeed();
     public abstract Material getDisplayItemsType();
 
     NamespacedKey RitualCircleKey = new NamespacedKey("rituals", "ritual_circle_entity");
@@ -30,6 +33,11 @@ public abstract class BasicRitual {
         for (int i = 0; i < 3; i++) {
             ItemDisplay display = (ItemDisplay) location.getWorld().spawnEntity(location.toCenterLocation(), EntityType.ITEM_DISPLAY);
             ritualCircles[i] = display;
+
+            Transformation transformation = display.getTransformation();
+            transformation.getScale().set(0, 0, 0);
+
+            display.setTransformation(transformation);
 
             ItemStack stack = new ItemStack(getDisplayItemsType());
             ItemMeta meta = stack.getItemMeta();
@@ -43,14 +51,22 @@ public abstract class BasicRitual {
         }
     }
 
+    private void AppearAnimation() {
+        new AppearRunnable(this).runTaskTimer(Rituals.Instance, 0, 1);
+    }
+
     public BasicRitual(Location location) {
         this.location = location;
 
         createCircles();
 
+        AppearAnimation();
+
         basicUpdate = new BukkitRunnable() {
             @Override
             public void run() {
+                if (!Appeared) return;
+
                 BasicUpdateOfRitual();
                 RitualTick();
             }

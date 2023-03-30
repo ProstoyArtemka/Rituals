@@ -1,15 +1,16 @@
 package prostoyartemka.ru.rituals.ritual;
 
 import com.destroystokyo.paper.ParticleBuilder;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class TestRitual extends BasicRitual {
+
+    private List<Integer> RotationPartsSpeed = Arrays.asList(1, 3, 5);
+
     public TestRitual(Location location) {
         super(location);
 
@@ -22,24 +23,36 @@ public class TestRitual extends BasicRitual {
         builder.spawn();
     }
 
-    @Override
-    public void RitualTick() {
+    private void candlesCheck() {
         Location l = getLocation().clone();
 
+        int countOfCandles = 1;
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0) continue;
                 if (Math.abs(x) == Math.abs(y)) continue;
+                Location candleLocation = l.clone().add(x, 0, y);
 
                 ParticleBuilder builder = new ParticleBuilder(Particle.REDSTONE);
-                builder.location(l.clone().add(x * 1.5f, 0, y * 1.5f));
+                builder.location(candleLocation.toCenterLocation());
 
                 builder.color(Color.RED);
                 builder.count(5);
 
-                builder.spawn();
+                if (!Tag.CANDLES.isTagged(candleLocation.getBlock().getType())) builder.spawn();
+                else countOfCandles++;
             }
         }
+
+        for (int i = 0; i < 3; i++) {
+            RotationPartsSpeed = Arrays.asList(countOfCandles, 3 * countOfCandles, 5 * countOfCandles);
+        }
+
+    }
+
+    @Override
+    public void RitualTick() {
+        candlesCheck();
     }
 
     @Override
@@ -54,7 +67,12 @@ public class TestRitual extends BasicRitual {
 
     @Override
     public List<Integer> getRotationPartsSpeed() {
-        return Arrays.asList(1, 3, 5);
+        return RotationPartsSpeed;
+    }
+
+    @Override
+    public List<Float> getAppearSpeed() {
+        return Arrays.asList(0.04f, 0.03f, 0.02f);
     }
 
     @Override
