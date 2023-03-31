@@ -5,8 +5,12 @@ import org.bukkit.Keyed;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import prostoyartemka.ru.craft.CustomCraft;
 import prostoyartemka.ru.rituals.crafts.DiamondPowderCraft;
+import prostoyartemka.ru.rituals.crafts.IronPowderCraft;
+import prostoyartemka.ru.rituals.crafts.PedestalCraft;
 import prostoyartemka.ru.rituals.crafts.RitualPowderCraft;
+import prostoyartemka.ru.rituals.events.PedestalListener;
 import prostoyartemka.ru.rituals.events.RitualPowderListener;
 
 import java.util.Arrays;
@@ -15,11 +19,15 @@ import java.util.List;
 public final class Rituals extends JavaPlugin {
     public static List<Recipe> CraftRecipes = Arrays.asList(
             new RitualPowderCraft(),
-            new DiamondPowderCraft()
+            new DiamondPowderCraft(),
+            new IronPowderCraft(),
+
+            new PedestalCraft()
     );
 
     public static List<Listener> Listeners = Arrays.asList(
-            new RitualPowderListener()
+            new RitualPowderListener(),
+            new PedestalListener()
     );
 
     public static Rituals Instance;
@@ -29,7 +37,7 @@ public final class Rituals extends JavaPlugin {
             if (!(r instanceof Keyed)) continue;
 
             Keyed keyed = (Keyed) r;
-            if (Bukkit.getRecipe(keyed.getKey()) == null) Bukkit.addRecipe(r);
+            CustomCraft.registerCustomCraft(keyed.getKey(), r);
         }
     }
 
