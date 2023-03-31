@@ -66,6 +66,8 @@ public class PedestalListener implements Listener {
         if (!Objects.equals(e.getTag(), new Pedestal().getTag())) return;
         if (e.getClickedBlock() == null) return;
 
+        e.setCancel(true);
+
         Location customBlockLocation = e.getClickedBlock().getLocation().toCenterLocation();
 
         if (e.getItem().getType() == Material.AIR) clickedEmptyHand(customBlockLocation, e.getPlayer());
